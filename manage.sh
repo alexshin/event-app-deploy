@@ -2,16 +2,23 @@
 
 set -ex
 
+if ! [ -x "$(command -v docker-compose)" ]; then
+    DOCKER_COMPOSE=/opt/bin/docker-compose
+else
+    DOCKER_COMPOSE=docker-compose
+fi
+
+
 function clear {
-    docker-compose stop
-    docker-compose kill
-    docker-compose rm --force
+    $DOCKER_COMPOSE stop
+    $DOCKER_COMPOSE kill
+    $DOCKER_COMPOSE rm --force
     docker image rm --force alexshin/event-app-api
 }
 
 
 function run_cli {
-    docker-compose exec app ./manage.py $1 $2 $3
+    $DOCKER_COMPOSE exec app ./manage.py $1 $2 $3
 }
 
 
@@ -41,5 +48,5 @@ case "$@" in
     "clear" ) clear ;;
     "run_cli"* ) run_cli $2 $3 $4 ;;
     "update") update ;;
-    *) docker-compose "$@" ;;
+    *) $DOCKER_COMPOSE "$@" ;;
 esac
