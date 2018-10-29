@@ -1,0 +1,3 @@
+POSTGRES_USER=secure_root
+POSTGRES_PASSWORD=secure_root_password
+POSTGRES_DB=event_db

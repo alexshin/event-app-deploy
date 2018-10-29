@@ -1,0 +1,54 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:alpine
+    restart: unless-stopped
+    container_name: postgres-events
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+    expose:
+      - 5432
+    env_file:
+      - ./postgres.env
+  
+  redis:
+    image: redis:alpine
+    restart: unless-stopped
+    container_name: redis-events
+    volumes:
+      - ./data/redis:/data
+    expose:
+      - 6379
+
+  app:
+    image: alexshin/event-app-api
+    restart: unless-stopped
+    container_name: app-events
+    expose:
+      - 8000
+    depends_on:
+      - postgres
+      - redis
+    links:
+      - postgres:postgres
+      - redis:redis
+    env_file:
+      - ./app.env
+      - ./postgres.env
+    volumes:
+      - ./data/static:/opt/app/event-app/static
+  
+  nginx:
+    build: ./services/nginx
+    container_name: nginx-events
+    restart: unless-stopped
+    ports:
+      - 80:80
+    volumes:
+      - ./data/static:/var/www/static
+      - ./data/nginx/logs:/var/log/nginx/
+    depends_on:
+      - app
+    links:
+      - app:app

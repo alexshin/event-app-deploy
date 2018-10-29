@@ -1,0 +1,10 @@
+APP_ALLOWED_HOSTS=127.0.0.1,localhost
+APP_ENVIRONMENT=prod
+APP_SECRET_KEY=something-secret
+APP_BASE_URL=http://localhost
+SENTRY_DSN=https://xxx@sentry.io/yyy
+EVENTBRITE_OAUTH_TOKEN=XXXX
+APP_EMAIL_HOST=smtp.mailgun.org
+APP_EMAIL_PORT=587
+APP_EMAIL_USER=postmaster@localhost
+APP_EMAIL_PASS=ZZZ
